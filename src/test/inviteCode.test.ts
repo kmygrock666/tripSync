@@ -8,7 +8,7 @@ describe('generateInviteCode', () => {
 
   it('只含無歧義字元（無 0/O/1/I/L）', () => {
     for (let i = 0; i < 50; i++) {
-      expect(generateInviteCode()).toMatch(/^[A-HJ-NP-Z2-9]{6}$/)
+      expect(generateInviteCode()).toMatch(/^[A-HJ-KM-NP-Z2-9]{6}$/)
     }
   })
 
