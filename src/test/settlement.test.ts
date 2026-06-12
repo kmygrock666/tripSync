@@ -45,6 +45,13 @@ describe('computeBalances', () => {
     expect(bal.c).toBe(-33)
     expect(bal.a).toBe(66)
   })
+
+  it('付款人不在分帳名單且除不盡：總和仍為 0，差額由付款人吸收', () => {
+    const expenses = [exp({ amount: 100, paidBy: 'a', splitWith: ['b', 'c', 'd'] })]
+    const bal = computeBalances(expenses, rates)
+    expect(bal.a + bal.b + bal.c + bal.d).toBe(0)
+    expect(bal.a).toBe(99)
+  })
 })
 
 describe('simplifyDebts', () => {
@@ -64,5 +71,17 @@ describe('simplifyDebts', () => {
 
   it('全部結清回傳空陣列', () => {
     expect(simplifyDebts({ a: 0, b: 0 })).toEqual([])
+  })
+
+  it('四人：兩個債權人兩個債務人', () => {
+    const transfers = simplifyDebts({ a: 10, b: 5, c: -10, d: -5 })
+    expect(transfers).toEqual([
+      { from: 'c', to: 'a', amount: 10 },
+      { from: 'd', to: 'b', amount: 5 },
+    ])
+  })
+
+  it('總和不為 0 時丟出錯誤', () => {
+    expect(() => simplifyDebts({ a: 151, b: -150 })).toThrow('do not sum to 0')
   })
 })
