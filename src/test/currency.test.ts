@@ -19,4 +19,16 @@ describe('toTWD', () => {
   it('未知幣別丟出錯誤', () => {
     expect(() => toTWD(100, 'EUR', rates)).toThrow('未設定匯率')
   })
+
+  it('TWD 非整數也四捨五入', () => {
+    expect(toTWD(99.5, 'TWD', rates)).toBe(100)
+  })
+
+  it('金額 0 回傳 0', () => {
+    expect(toTWD(0, 'JPY', rates)).toBe(0)
+  })
+
+  it('負數照算（由 UI 層擋下，函式不設限）', () => {
+    expect(toTWD(-500, 'JPY', rates)).toBe(-110)
+  })
 })
