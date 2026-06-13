@@ -114,6 +114,10 @@ label { display: block; font-size: 0.85rem; color: var(--muted); margin: 12px 0 
 .settle-row:last-child { border-bottom: none; }
 .transfer strong { color: var(--danger); }
 
+.check-row { display: flex; justify-content: space-between; align-items: center; padding: 6px 0; }
+.done { text-decoration: line-through; color: var(--muted); }
+.invite-code { font-family: monospace; font-size: 1.2rem; letter-spacing: 2px; color: var(--primary); }
+
 /* 電腦版：側邊欄式導覽 */
 @media (min-width: 768px) {
   .tab-bar {
