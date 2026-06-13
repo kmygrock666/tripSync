@@ -91,6 +91,15 @@ label { display: block; font-size: 0.85rem; color: var(--muted); margin: 12px 0 
   border-radius: 8px; padding: 8px 16px; cursor: pointer; margin-left: auto;
 }
 
+.expense-item { cursor: pointer; }
+.expense-amount { margin-left: auto; }
+.split-checks { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 4px; }
+.check-label {
+  display: flex; gap: 4px; align-items: center; margin: 0;
+  font-size: 0.95rem; color: var(--text);
+}
+.check-label input { width: auto; }
+
 /* 電腦版：側邊欄式導覽 */
 @media (min-width: 768px) {
   .tab-bar {
