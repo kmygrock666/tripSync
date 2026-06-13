@@ -1,0 +1,45 @@
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --primary: #1a73e8;
+  --bg: #f5f6f8;
+  --card: #ffffff;
+  --text: #202124;
+  --muted: #5f6368;
+  --danger: #d93025;
+  --border: #dadce0;
+}
+
+body {
+  font-family: -apple-system, 'PingFang TC', 'Microsoft JhengHei', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+}
+
+.center { display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+
+.login-page {
+  display: flex; flex-direction: column; justify-content: center; align-items: center;
+  min-height: 100vh; gap: 16px; padding: 24px;
+}
+.login-page h1 { color: var(--primary); font-size: 2.5rem; }
+.login-page p { color: var(--muted); }
+
+.btn-primary {
+  background: var(--primary); color: #fff; border: none; border-radius: 8px;
+  padding: 12px 24px; font-size: 1rem; cursor: pointer;
+}
+.btn-primary:active { opacity: 0.85; }
+
+.error { color: var(--danger); font-size: 0.9rem; }
+
+.card {
+  background: var(--card); border-radius: 12px; padding: 16px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08); margin-bottom: 12px;
+}
+
+input, select, textarea {
+  width: 100%; padding: 10px; border: 1px solid var(--border);
+  border-radius: 8px; font-size: 1rem; background: #fff;
+}
+label { display: block; font-size: 0.85rem; color: var(--muted); margin: 12px 0 4px; }
