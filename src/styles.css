@@ -57,3 +57,34 @@ label { display: block; font-size: 0.85rem; color: var(--muted); margin: 12px 0 
 .trip-card { display: flex; flex-direction: column; gap: 4px; text-decoration: none; color: inherit; }
 .row { display: flex; gap: 8px; margin-top: 12px; align-items: center; }
 .full { width: 100%; }
+
+.trip-layout { display: flex; flex-direction: column; min-height: 100vh; }
+.trip-header {
+  display: flex; align-items: center; gap: 12px;
+  background: var(--card); padding: 12px 16px; border-bottom: 1px solid var(--border);
+  position: sticky; top: 0; z-index: 10;
+}
+.trip-header h1 { font-size: 1.1rem; flex: 1; }
+.sync-dot { font-size: 0.9rem; }
+.trip-main { flex: 1; padding-bottom: 72px; }
+.tab-bar {
+  position: fixed; bottom: 0; left: 0; right: 0;
+  display: flex; background: var(--card); border-top: 1px solid var(--border);
+  padding-bottom: env(safe-area-inset-bottom);
+}
+.tab-bar a {
+  flex: 1; text-align: center; padding: 12px 4px; text-decoration: none;
+  color: var(--muted); font-size: 0.8rem;
+}
+.tab-bar a.active { color: var(--primary); font-weight: 600; }
+
+/* 電腦版：側邊欄式導覽 */
+@media (min-width: 768px) {
+  .tab-bar {
+    top: 57px; bottom: auto; left: 0; right: auto;
+    flex-direction: column; width: 180px; height: calc(100vh - 57px);
+    border-top: none; border-right: 1px solid var(--border);
+  }
+  .tab-bar a { text-align: left; padding: 14px 20px; font-size: 1rem; }
+  .trip-main { margin-left: 180px; padding-bottom: 16px; }
+}
