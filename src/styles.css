@@ -78,6 +78,19 @@ label { display: block; font-size: 0.85rem; color: var(--muted); margin: 12px 0 
 }
 .tab-bar a.active { color: var(--primary); font-weight: 600; }
 
+.day-heading { font-size: 1rem; margin: 20px 0 8px; color: var(--muted); }
+.badge {
+  background: var(--primary); color: #fff; font-size: 0.7rem;
+  padding: 2px 8px; border-radius: 10px; vertical-align: middle;
+}
+.itinerary-item { cursor: pointer; }
+.item-head { display: flex; gap: 8px; align-items: baseline; flex-wrap: wrap; }
+.item-time { color: var(--primary); font-weight: 600; min-width: 48px; }
+.btn-danger {
+  background: none; border: 1px solid var(--danger); color: var(--danger);
+  border-radius: 8px; padding: 8px 16px; cursor: pointer; margin-left: auto;
+}
+
 /* 電腦版：側邊欄式導覽 */
 @media (min-width: 768px) {
   .tab-bar {
