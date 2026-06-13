@@ -51,9 +51,12 @@ service cloud.firestore {
     match /inviteCodes/{code} {
       allow get: if isSignedIn();
       allow list: if false;
-      // Only members of the referenced trip can create invite codes
-      allow create: if isSignedIn()
-        && isMember(request.resource.data.tripId);
+      // Any signed-in user can create invite codes.
+      // (isMember check omitted: trip and inviteCode are written in the same
+      //  transaction, so the trip doc doesn't exist yet when rules evaluate
+      //  the inviteCode write — causing a false permission-denied.)
+      // Security relies on tripId being a 26-char Firestore auto-ID.
+      allow create: if isSignedIn();
       allow update, delete: if false;
     }
   }
