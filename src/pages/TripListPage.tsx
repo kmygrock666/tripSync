@@ -13,7 +13,8 @@ export function TripListPage() {
   const [trips, setTrips] = useState<Trip[]>([])
   const [showCreate, setShowCreate] = useState(false)
   const [joinCode, setJoinCode] = useState('')
-  const [error, setError] = useState('')
+  const [joinError, setJoinError] = useState('')
+  const [createError, setCreateError] = useState('')
 
   useEffect(() => {
     if (!user) return
@@ -30,45 +31,50 @@ export function TripListPage() {
     if (!user) return
     const name = (formData.get('name') as string).trim()
     if (!name) return
+    setCreateError('')
     const code = generateInviteCode()
     const tripRef = doc(collection(db, 'trips'))
     const codeRef = doc(db, 'inviteCodes', code)
-    await runTransaction(db, async (tx) => {
-      tx.set(tripRef, {
-        name,
-        destination: (formData.get('destination') as string).trim(),
-        startDate: formData.get('startDate') as string,
-        endDate: formData.get('endDate') as string,
-        inviteCode: code,
-        members: {
-          [user.uid]: {
-            name: user.displayName ?? '旅伴',
-            photo: user.photoURL ?? '',
-            joinedAt: Date.now(),
+    try {
+      await runTransaction(db, async (tx) => {
+        tx.set(tripRef, {
+          name,
+          destination: (formData.get('destination') as string).trim(),
+          startDate: formData.get('startDate') as string,
+          endDate: formData.get('endDate') as string,
+          inviteCode: code,
+          members: {
+            [user.uid]: {
+              name: user.displayName ?? '旅伴',
+              photo: user.photoURL ?? '',
+              joinedAt: Date.now(),
+            },
           },
-        },
-        memberUids: [user.uid],
-        baseCurrency: 'TWD',
-        rates: {},
-        createdBy: user.uid,
+          memberUids: [user.uid],
+          baseCurrency: 'TWD',
+          rates: {},
+          createdBy: user.uid,
+        })
+        tx.set(codeRef, { tripId: tripRef.id })
       })
-      tx.set(codeRef, { tripId: tripRef.id })
-    })
-    setShowCreate(false)
+      setShowCreate(false)
+    } catch {
+      setCreateError('建立失敗，請稍後再試')
+    }
   }
 
   async function handleJoin() {
     if (!user) return
-    setError('')
+    setJoinError('')
     const code = joinCode.trim().toUpperCase()
     if (code.length !== 6) {
-      setError('邀請碼為 6 碼')
+      setJoinError('邀請碼為 6 碼')
       return
     }
     try {
       const codeSnap = await getDoc(doc(db, 'inviteCodes', code))
       if (!codeSnap.exists()) {
-        setError('邀請碼無效')
+        setJoinError('邀請碼無效')
         return
       }
       const tripId = codeSnap.data().tripId as string
@@ -76,8 +82,11 @@ export function TripListPage() {
         const tripRef = doc(db, 'trips', tripId)
         const tripSnap = await tx.get(tripRef)
         if (!tripSnap.exists()) throw new Error('旅程不存在')
-        const data = tripSnap.data() as Trip
-        if (data.memberUids.includes(user.uid)) return
+        const data = tripSnap.data() as Omit<Trip, 'id'>
+        if (data.memberUids.includes(user.uid)) {
+          setJoinError('您已是此旅程的成員')
+          return
+        }
         tx.update(tripRef, {
           [`members.${user.uid}`]: {
             name: user.displayName ?? '旅伴',
@@ -89,7 +98,7 @@ export function TripListPage() {
       })
       setJoinCode('')
     } catch {
-      setError('加入失敗，請確認網路後再試')
+      setJoinError('加入失敗，請確認網路後再試')
     }
   }
 
@@ -127,6 +136,7 @@ export function TripListPage() {
                 取消
               </button>
             </div>
+            {createError && <p className="error">{createError}</p>}
           </form>
         ) : (
           <button className="btn-primary full" onClick={() => setShowCreate(true)}>
@@ -146,7 +156,7 @@ export function TripListPage() {
           />
           <button className="btn-primary" onClick={handleJoin}>加入</button>
         </div>
-        {error && <p className="error">{error}</p>}
+        {joinError && <p className="error">{joinError}</p>}
       </div>
     </div>
   )
