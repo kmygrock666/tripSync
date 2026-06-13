@@ -33,9 +33,9 @@ export function ItineraryTab({ trip }: { trip: Trip }) {
       time: formData.get('time') as string,
       type: formData.get('type') as ItineraryType,
       title: (formData.get('title') as string).trim(),
-      note: (formData.get('note') as string).trim(),
-      mapUrl: (formData.get('mapUrl') as string).trim(),
-      bookingRef: (formData.get('bookingRef') as string).trim(),
+      note: ((formData.get('note') as string | null) ?? '').trim(),
+      mapUrl: ((formData.get('mapUrl') as string | null) ?? '').trim(),
+      bookingRef: ((formData.get('bookingRef') as string | null) ?? '').trim(),
     }
     if (!data.title || !data.day) return
     try {
@@ -143,6 +143,7 @@ export function ItineraryTab({ trip }: { trip: Trip }) {
           </h2>
           {byDay
             .get(day)!
+            .slice()
             .sort((a, b) => a.time.localeCompare(b.time))
             .map((it) => (
               <div
@@ -151,7 +152,12 @@ export function ItineraryTab({ trip }: { trip: Trip }) {
                 onClick={() => setEditing(it)}
                 role="button"
                 tabIndex={0}
-                onKeyDown={(e) => e.key === 'Enter' && setEditing(it)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault()
+                    setEditing(it)
+                  }
+                }}
                 aria-label={`編輯：${it.title}`}
               >
                 <div className="item-head">
@@ -163,7 +169,7 @@ export function ItineraryTab({ trip }: { trip: Trip }) {
                 {it.bookingRef && <p className="muted">📎 {it.bookingRef}</p>}
                 {it.mapUrl && (
                   <a
-                    href={it.mapUrl}
+                    href={/^https?:\/\//.test(it.mapUrl) ? it.mapUrl : '#'}
                     target="_blank"
                     rel="noreferrer"
                     className="btn-text"
