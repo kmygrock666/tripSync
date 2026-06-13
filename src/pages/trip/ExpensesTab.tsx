@@ -29,11 +29,11 @@ export function ExpensesTab({ trip }: { trip: Trip }) {
       return
     }
     const data = {
-      date: formData.get('date') as string,
-      category: formData.get('category') as ExpenseCategory,
+      date: ((formData.get('date') as string | null) ?? ''),
+      category: ((formData.get('category') as string | null) ?? 'other') as ExpenseCategory,
       amount,
-      currency: formData.get('currency') as string,
-      paidBy: formData.get('paidBy') as string,
+      currency: ((formData.get('currency') as string | null) ?? 'TWD'),
+      paidBy: ((formData.get('paidBy') as string | null) ?? ''),
       splitWith,
       note: ((formData.get('note') as string | null) ?? '').trim(),
       createdAt: editing === 'new' ? Date.now() : (editing as Expense).createdAt,
