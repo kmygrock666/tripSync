@@ -10,10 +10,12 @@ import {
 import { db } from '../../lib/firebase'
 import { useSubcollection } from '../../hooks/useTripData'
 import type { ChecklistItem, Trip } from '../../lib/types'
+import { SeoulSeedButton } from './SeoulSeed' // TODO: 匯入後刪除此行
 
 export function MoreTab({ trip }: { trip: Trip }) {
   return (
     <div className="page">
+      <SeoulSeedButton trip={trip} />{/* TODO: 匯入後刪除此行 */}
       <Checklist trip={trip} />
       <RatesSettings trip={trip} />
       <TripInfo trip={trip} />
