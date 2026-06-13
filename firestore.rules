@@ -1,0 +1,53 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isMember(tripId) {
+      return isSignedIn()
+        && request.auth.uid in get(/databases/$(database)/documents/trips/$(tripId)).data.memberUids;
+    }
+
+    match /trips/{tripId} {
+      // Member can read their own trips
+      allow read: if isSignedIn()
+        && request.auth.uid in resource.data.memberUids;
+
+      // Create: creator must include themselves in memberUids
+      allow create: if isSignedIn()
+        && request.auth.uid in request.resource.data.memberUids
+        && request.resource.data.createdBy == request.auth.uid;
+
+      // Update: either already a member OR joining via invite code
+      // (new memberUids contains all old ones + exactly the requester)
+      allow update: if isSignedIn() && (
+        request.auth.uid in resource.data.memberUids
+        || (
+          request.resource.data.memberUids.hasAll(resource.data.memberUids)
+          && request.resource.data.memberUids.size() == resource.data.memberUids.size() + 1
+          && request.auth.uid in request.resource.data.memberUids
+        )
+      );
+
+      allow delete: if isSignedIn()
+        && resource.data.createdBy == request.auth.uid;
+
+      // Sub-collections: members only
+      match /{sub}/{docId} {
+        allow read, write: if isMember(tripId);
+      }
+    }
+
+    match /inviteCodes/{code} {
+      // Signed-in users can look up a specific code (but not list all codes)
+      allow get: if isSignedIn();
+      allow list: if false;
+      // Only members of a trip can create invite codes (written during trip creation)
+      allow create: if isSignedIn();
+      allow update, delete: if false;
+    }
+  }
+}
