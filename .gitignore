@@ -16,6 +16,13 @@ dist-ssr
 .env
 .env.*
 
+# Firebase service account keys — NEVER commit
+serviceAccount*.json
+*-firebase-adminsdk-*.json
+
+# One-time seed scripts
+seed.mjs
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
