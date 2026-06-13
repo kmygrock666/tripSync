@@ -14,6 +14,8 @@ body {
   font-family: -apple-system, 'PingFang TC', 'Microsoft JhengHei', sans-serif;
   background: var(--bg);
   color: var(--text);
+  font-size: 16px;
+  line-height: 1.5;
 }
 
 .center { display: flex; justify-content: center; align-items: center; min-height: 100vh; }
@@ -43,3 +45,7 @@ input, select, textarea {
   border-radius: 8px; font-size: 1rem; background: #fff;
 }
 label { display: block; font-size: 0.85rem; color: var(--muted); margin: 12px 0 4px; }
+
+/* hover / focus states for buttons */
+.btn-primary:hover { filter: brightness(1.08); }
+.btn-primary:focus-visible { outline: 3px solid var(--primary); outline-offset: 2px; }

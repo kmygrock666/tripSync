@@ -1,15 +1,24 @@
 import { useState } from 'react'
-import { useAuth } from '../hooks/useAuth'
 
-export function LoginPage() {
-  const { signIn } = useAuth()
+interface Props {
+  signIn: () => Promise<unknown>
+}
+
+export function LoginPage({ signIn }: Props) {
   const [error, setError] = useState('')
 
   async function handleSignIn() {
     setError('')
     try {
       await signIn()
-    } catch {
+    } catch (err: unknown) {
+      const code = (err as { code?: string }).code ?? ''
+      if (
+        code === 'auth/popup-closed-by-user' ||
+        code === 'auth/cancelled-popup-request'
+      ) {
+        return // user dismissed the popup — not an error
+      }
       setError('登入失敗，請再試一次')
     }
   }

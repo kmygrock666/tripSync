@@ -5,10 +5,10 @@ import { TripListPage } from './pages/TripListPage'
 import { TripLayout } from './pages/trip/TripLayout'
 
 export default function App() {
-  const { user, loading } = useAuth()
+  const { user, loading, signIn } = useAuth()
 
-  if (loading) return <div className="center">載入中…</div>
-  if (!user) return <LoginPage />
+  if (loading) return <div className="center" role="status" aria-label="載入中">載入中…</div>
+  if (!user) return <LoginPage signIn={signIn} />
 
   return (
     <Routes>
