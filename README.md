@@ -1,73 +1,33 @@
-# React + TypeScript + Vite
+# TripSync
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+多人共用的旅遊行程安排＋分帳記帳 PWA。
 
-Currently, two official plugins are available:
+## 功能
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- 每日行程時間軸（景點/交通/住宿/餐廳、地圖連結、訂單資訊）
+- 分帳記帳（多幣別、自動換算台幣、最少轉帳結算）
+- 行前準備清單
+- Google 登入 ＋ 邀請碼共用旅程
+- 離線可用，連網自動同步（Firestore persistent cache）
+- 可安裝到手機主畫面（PWA）
 
-## React Compiler
+## 開發
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm install
+npm run dev    # 開發伺服器
+npm test       # 單元測試
+npm run build  # 產出 dist/
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## 部署
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+push 到 `main` 自動部署到 GitHub Pages（`.github/workflows/deploy.yml`）。
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+## Firebase 設定
+
+1. [console.firebase.google.com](https://console.firebase.google.com) 建立專案
+2. 啟用 Authentication（Google）與 Firestore（asia-east1）
+3. 把 Web App config 貼到 `src/lib/firebaseConfig.ts`
+4. 把 `firestore.rules` 貼到 Console → Firestore → Rules 並發布
+5. Authentication → Authorized domains 加入 `<username>.github.io`
