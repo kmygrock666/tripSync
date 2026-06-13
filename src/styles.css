@@ -66,7 +66,7 @@ label { display: block; font-size: 0.85rem; color: var(--muted); margin: 12px 0 
 }
 .trip-header h1 { font-size: 1.1rem; flex: 1; }
 .sync-dot { font-size: 0.9rem; }
-.trip-main { flex: 1; padding-bottom: 72px; }
+.trip-main { flex: 1; padding-bottom: calc(72px + env(safe-area-inset-bottom)); }
 .tab-bar {
   position: fixed; bottom: 0; left: 0; right: 0;
   display: flex; background: var(--card); border-top: 1px solid var(--border);

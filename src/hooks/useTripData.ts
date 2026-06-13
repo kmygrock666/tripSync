@@ -7,28 +7,40 @@ import type { Trip } from '../lib/types'
 export function useTrip(tripId: string) {
   const [trip, setTrip] = useState<Trip | null>(null)
   const [notFound, setNotFound] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
-    return onSnapshot(doc(db, 'trips', tripId), (snap) => {
-      if (!snap.exists()) {
-        setNotFound(true)
-        return
-      }
-      setTrip({ ...(snap.data() as Omit<Trip, 'id'>), id: snap.id })
-    })
+    setTrip(null)
+    setNotFound(false)
+    setError(null)
+    return onSnapshot(
+      doc(db, 'trips', tripId),
+      (snap) => {
+        if (!snap.exists()) {
+          setNotFound(true)
+          return
+        }
+        setTrip({ ...(snap.data() as Omit<Trip, 'id'>), id: snap.id })
+      },
+      (err) => setError(err.message),
+    )
   }, [tripId])
 
-  return { trip, notFound }
+  return { trip, notFound, error }
 }
 
 /** 訂閱 trip 子集合（itinerary / expenses / checklist） */
-export function useSubcollection<T>(tripId: string, name: string): T[] {
+export function useSubcollection<T extends { id: string }>(tripId: string, name: string): T[] {
   const [items, setItems] = useState<T[]>([])
 
   useEffect(() => {
-    return onSnapshot(collection(db, 'trips', tripId, name), (snap) => {
-      setItems(snap.docs.map((d) => ({ ...d.data(), id: d.id }) as T))
-    })
+    return onSnapshot(
+      collection(db, 'trips', tripId, name),
+      (snap) => {
+        setItems(snap.docs.map((d) => ({ ...d.data(), id: d.id }) as T))
+      },
+      (err) => console.error(`useSubcollection(${name}):`, err),
+    )
   }, [tripId, name])
 
   return items
@@ -43,6 +55,7 @@ export function usePendingWrites(tripId: string): boolean {
       doc(db, 'trips', tripId),
       { includeMetadataChanges: true },
       (snap) => setPending(snap.metadata.hasPendingWrites),
+      (err) => console.error('usePendingWrites:', err),
     )
   }, [tripId])
 
