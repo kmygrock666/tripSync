@@ -4,6 +4,7 @@ import { ItineraryTab } from './ItineraryTab'
 import { ExpensesTab } from './ExpensesTab'
 import { SettlementTab } from './SettlementTab'
 import { MoreTab } from './MoreTab'
+import { ErrorBoundary } from '../../components/ErrorBoundary'
 
 export function TripLayout() {
   const { tripId } = useParams<{ tripId: string }>()
@@ -29,13 +30,15 @@ export function TripLayout() {
       </header>
 
       <main className="trip-main">
-        <Routes>
-          <Route path="itinerary" element={<ItineraryTab trip={trip} />} />
-          <Route path="expenses" element={<ExpensesTab trip={trip} />} />
-          <Route path="settlement" element={<SettlementTab trip={trip} />} />
-          <Route path="more" element={<MoreTab trip={trip} />} />
-          <Route path="*" element={<Navigate to="itinerary" replace />} />
-        </Routes>
+        <ErrorBoundary>
+          <Routes>
+            <Route path="itinerary" element={<ItineraryTab trip={trip} />} />
+            <Route path="expenses" element={<ExpensesTab trip={trip} />} />
+            <Route path="settlement" element={<SettlementTab trip={trip} />} />
+            <Route path="more" element={<MoreTab trip={trip} />} />
+            <Route path="*" element={<Navigate to="itinerary" replace />} />
+          </Routes>
+        </ErrorBoundary>
       </main>
 
       <nav className="tab-bar">
