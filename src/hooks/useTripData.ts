@@ -34,6 +34,7 @@ export function useSubcollection<T extends { id: string }>(tripId: string, name:
   const [items, setItems] = useState<T[]>([])
 
   useEffect(() => {
+    setItems([])
     return onSnapshot(
       collection(db, 'trips', tripId, name),
       (snap) => {

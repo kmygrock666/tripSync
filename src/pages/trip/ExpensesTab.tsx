@@ -84,7 +84,7 @@ export function ExpensesTab({ trip }: { trip: Trip }) {
             required
             defaultValue={
               editing === 'new'
-                ? new Date().toISOString().slice(0, 10)
+                ? (() => { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}` })()
                 : editing.date
             }
           />
@@ -105,7 +105,7 @@ export function ExpensesTab({ trip }: { trip: Trip }) {
               style={{ width: 100 }}
               defaultValue={
                 editing === 'new'
-                  ? currencies[currencies.length - 1]
+                  ? 'TWD'
                   : editing.currency
               }
             >

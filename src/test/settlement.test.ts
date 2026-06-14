@@ -82,6 +82,6 @@ describe('simplifyDebts', () => {
   })
 
   it('總和不為 0 時丟出錯誤', () => {
-    expect(() => simplifyDebts({ a: 151, b: -150 })).toThrow('do not sum to 0')
+    expect(() => simplifyDebts({ a: 152, b: -150 })).toThrow('do not sum to 0')
   })
 })

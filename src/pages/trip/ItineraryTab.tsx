@@ -9,7 +9,8 @@ const TYPE_LABEL: Record<ItineraryType, string> = {
 }
 
 function todayStr(): string {
-  return new Date().toISOString().slice(0, 10)
+  const d = new Date()
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
 }
 
 export function ItineraryTab({ trip }: { trip: Trip }) {
@@ -144,7 +145,7 @@ export function ItineraryTab({ trip }: { trip: Trip }) {
           {byDay
             .get(day)!
             .slice()
-            .sort((a, b) => a.time.localeCompare(b.time))
+            .sort((a, b) => (a.time ?? '').localeCompare(b.time ?? ''))
             .map((it) => (
               <div
                 key={it.id}

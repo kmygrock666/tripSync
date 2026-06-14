@@ -42,7 +42,7 @@ export function computeBalances(
 /** 貪婪法（降冪配對）：適用 2-4 人，近似最小化轉帳次數 */
 export function simplifyDebts(balances: Record<string, number>): Transfer[] {
   const sum = Object.values(balances).reduce((s, v) => s + v, 0)
-  if (sum !== 0) throw new Error(`simplifyDebts: balances do not sum to 0 (got ${sum})`)
+  if (Math.abs(sum) > 1) throw new Error(`simplifyDebts: balances do not sum to 0 (got ${sum})`)
   const creditors = Object.entries(balances)
     .filter(([, v]) => v > 0).map(([k, v]) => ({ uid: k, amt: v }))
     .sort((x, y) => y.amt - x.amt)

@@ -192,7 +192,14 @@ function RatesSettings({ trip }: { trip: Trip }) {
           新增
         </button>
       </div>
-      {msg && <p className="muted" style={{ marginTop: 8 }}>{msg}</p>}
+      {msg && (
+        <p
+          className={msg.startsWith('已更新') || msg.startsWith('抓取中') ? 'muted' : 'error'}
+          style={{ marginTop: 8 }}
+        >
+          {msg}
+        </p>
+      )}
     </div>
   )
 }

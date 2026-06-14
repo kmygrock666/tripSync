@@ -34,6 +34,7 @@ body {
 .btn-primary:active { opacity: 0.85; }
 
 .error { color: var(--danger); font-size: 0.9rem; }
+.error-msg { color: var(--danger); font-size: 0.95rem; }
 
 .card {
   background: var(--card); border-radius: 12px; padding: 16px;
@@ -65,7 +66,7 @@ label { display: block; font-size: 0.85rem; color: var(--muted); margin: 12px 0 
   position: sticky; top: 0; z-index: 10;
 }
 .trip-header h1 { font-size: 1.1rem; flex: 1; }
-.sync-dot { font-size: 0.9rem; }
+.sync-dot { font-size: 0.9rem; width: 24px; text-align: center; flex-shrink: 0; }
 .trip-main { flex: 1; padding-bottom: calc(72px + env(safe-area-inset-bottom)); }
 .tab-bar {
   position: fixed; bottom: 0; left: 0; right: 0;
@@ -74,13 +75,13 @@ label { display: block; font-size: 0.85rem; color: var(--muted); margin: 12px 0 
 }
 .tab-bar a {
   flex: 1; text-align: center; padding: 12px 4px; text-decoration: none;
-  color: var(--muted); font-size: 0.8rem;
+  color: var(--muted); font-size: 0.85rem;
 }
 .tab-bar a.active { color: var(--primary); font-weight: 600; }
 
 .day-heading { font-size: 1rem; margin: 20px 0 8px; color: var(--muted); }
 .badge {
-  background: var(--primary); color: #fff; font-size: 0.7rem;
+  background: var(--primary); color: #fff; font-size: 0.75rem;
   padding: 2px 8px; border-radius: 10px; vertical-align: middle;
 }
 .itinerary-item { cursor: pointer; }
@@ -127,4 +128,5 @@ label { display: block; font-size: 0.85rem; color: var(--muted); margin: 12px 0 
   }
   .tab-bar a { text-align: left; padding: 14px 20px; font-size: 1rem; }
   .trip-main { margin-left: 180px; padding-bottom: 16px; }
+  .trip-header { margin-left: 180px; }
 }

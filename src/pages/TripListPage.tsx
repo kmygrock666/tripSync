@@ -11,6 +11,7 @@ import type { Trip } from '../lib/types'
 export function TripListPage() {
   const { user, signOut } = useAuth()
   const [trips, setTrips] = useState<Trip[]>([])
+  const [loading, setLoading] = useState(true)
   const [showCreate, setShowCreate] = useState(false)
   const [joinCode, setJoinCode] = useState('')
   const [joinError, setJoinError] = useState('')
@@ -18,12 +19,14 @@ export function TripListPage() {
 
   useEffect(() => {
     if (!user) return
+    setLoading(true)
     const q = query(
       collection(db, 'trips'),
       where('memberUids', 'array-contains', user.uid),
     )
     return onSnapshot(q, (snap) => {
       setTrips(snap.docs.map((d) => ({ ...(d.data() as Omit<Trip, 'id'>), id: d.id })))
+      setLoading(false)
     })
   }, [user])
 
@@ -117,7 +120,7 @@ export function TripListPage() {
           </span>
         </Link>
       ))}
-      {trips.length === 0 && <p className="muted">還沒有旅程，建立一個吧！</p>}
+      {!loading && trips.length === 0 && <p className="muted">還沒有旅程，建立一個吧！</p>}
 
       <div className="card">
         {showCreate ? (
